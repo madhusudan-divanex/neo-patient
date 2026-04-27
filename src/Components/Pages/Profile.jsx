@@ -46,9 +46,11 @@ function Profile() {
             if (response.success) {
                 dispatch(fetchPatientDetail())
                 toast.success("Data updated")
+            }else{
+                toast.error(response.message)
             }
         } catch (error) {
-
+            toast.error(error?.response?.data?.message || "Error in updating profile")
         }
     }
     useEffect(() => {

@@ -154,7 +154,57 @@ function EditProfile() {
         const newReports = prescriptionForm?.filter((_, i) => i !== index);
         setPrescriptionForm(newReports);
     };
+    // const validate = () => {
+    //     let newErrors = {};
+    //     if (!personalForm.height.trim())
+    //         newErrors.name = "Height is required";
 
+    //     if (!personalForm.weight)
+    //         newErrors.dob = "Weight is required";
+
+    //     if (!personalForm.bloodGroup)
+    //         newErrors.gender = "Blood group is required";
+    //     if (!personalForm.address)
+    //         newErrors.address = "Address is required";
+
+    //     if (!personalForm.contactNumber)
+    //         newErrors.contactNumber = "Mobile number is required";
+    //     else if (!/^\d{10}$/.test(personalForm.contactNumber))
+    //         newErrors.contactNumber = "Mobile number must be 10 digits";
+
+    //     if (!personalForm.email)
+    //         newErrors.email = "Email is required";
+    //     else if (!/^\S+@\S+\.\S+$/.test(personalForm.email))
+    //         newErrors.email = "Invalid email address";
+
+    //     if (!personalForm.contact.emergencyContactName)
+    //         newErrors.emergencyContactName = "Emergency contact name is required";
+
+    //     if (!personalForm.contact.emergencyContactNumber)
+    //         newErrors.emergencyContactNumber = "Emergency contact number is required";
+    //     else if (!/^\d{10}$/.test(personalForm.contact.emergencyContactNumber))
+    //         newErrors.emergencyContactNumber = "Emergency contact number must be 10 digits";
+
+    //     if (!personalForm.department)
+    //         newErrors.department = "Department is required";
+
+    //     if (!personalForm.countryId && !id)
+    //         newErrors.countryId = "State is required";
+
+    //     if (!personalForm.stateId && !id)
+    //         newErrors.stateId = "State is required";
+
+    //     if (!personalForm.cityId && !id)
+    //         newErrors.cityId = "City is required";
+    //     // if (!form.pinCode)
+    //     //   newErrors.pinCode = "Pincode is required";
+    //     // else if (!/^\d{6}$/.test(form.pinCode))
+    //     //   newErrors.pinCode = "Pincode must be 6 digits";
+
+    //     setErrors(newErrors);
+    //     return Object.keys(newErrors).length === 0;
+    // };
+    
     const personalSubmit = async (e) => {
         e.preventDefault();
         setLoading(true)

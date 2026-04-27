@@ -335,7 +335,7 @@ function AppointmentDetailsCompleted() {
                                 </div>
                             </div>}
 
-                            {appointmentData?.labTest?.lab && <div className="col-lg-6 mb-3">
+                            {/* {appointmentData?.labTest?.lab && <div className="col-lg-6 mb-3">
                                 <div className="appointment-booking-detail-bx">
                                     <div className="booking-details-tp-title">
                                         <h5>Tests prescribed by the doctor</h5>
@@ -411,13 +411,25 @@ function AppointmentDetailsCompleted() {
                                                                 </button>
                                                         </div>
                                                     </div>
-
-                                                    {/* <div className="cbc-result-bx mt-2">
-                                                                    <p>Result CBC Report</p>
-                                                                    <h5>Negative</h5>
-                                                                </div> */}
                                                 </div>)
                                         }
+                                    </div>
+                                </div>
+                            </div>} */}
+                            {appointmentData?.labTest?.testCat && <div className="col-lg-6 mb-3">
+                                <div className="appointment-booking-detail-bx">
+                                    <div className="booking-details-tp-title">
+                                        <h5>Tests prescribed by the doctor</h5>
+                                    </div>
+                                    <div className="appointment-listing-bx">
+                                        <div className="nw-presc-doctor-bx nw-presc-lab-bx">
+                                            {/* <img src={appointmentData?.labTest?.lab?.labId?.logo ? `${base_url}/${appointmentData?.labTest?.lab?.labId?.logo}`
+                                                : "/lab-pic.png"} alt="" /> */}
+                                            <div className="appointment-info-details">
+                                                <h4 className="">{appointmentData?.labTest?.testCat?.name}</h4>
+                                                {appointmentData?.labTest?.subCat?.map(item=><p className="">{item?.name}</p>)}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>}

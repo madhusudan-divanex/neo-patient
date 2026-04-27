@@ -93,7 +93,7 @@ function ShareHealthCard() {
                                                 </div> */}
                                 <div className="add-patients-clients premium-crd-details" ref={cardRef}>
                                     <div className="chip-card"></div>
-                                    <img src="/cardBg.png" alt="" loading="lazy" />
+                                    <img src="/PatientNeoCard.png" alt="" loading="lazy" />
                                     <div className="patient-card-details nw-patient-details">
                                         <h4>{profiles?.name?.length > 13 ? profiles?.name?.slice(0, 13) :
                                             profiles?.name}</h4>
