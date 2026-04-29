@@ -7,6 +7,7 @@ import Loader from "../../Loader/Loader"
 import ReportDownload from "./ReportDownload"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import base_url from "../../baseUrl"
 
 function LabReport() {
     const patientId = localStorage.getItem('patientId')
@@ -79,19 +80,18 @@ function LabReport() {
                                                                 month: 'long',
                                                                 year: 'numeric',
                                                             })}</td>
-                                                            <td>{item?.testId?.shortName}</td>
+                                                            <td>{item?.subCatId?.subCategory}</td>
                                                             <td>
                                                                 <div>
-                                                                    <button
+                                                                    <a
                                                                         className="thm-btn thm-outline-btn"
                                                                         disabled={pdfLoading !== null}
-                                                                        onClick={() =>
-                                                                            handleDownload(item?.appointmentId, item?.testId?._id, item?._id)
-                                                                        }
+                                                                        target="_blank"
+                                                                        href={`${base_url}/${item?.upload?.report}`}
                                                                     >
                                                                         <FontAwesomeIcon icon={faFilePdf} style={{ color: "#EF5350" }} />
                                                                         {pdfLoading == item?._id ? 'Downloading' : 'Download'}
-                                                                    </button>
+                                                                    </a>
                                                                 </div>
                                                             </td>
 

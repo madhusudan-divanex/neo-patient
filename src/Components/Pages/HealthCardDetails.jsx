@@ -56,7 +56,7 @@ function HealthCardDetails() {
                                     <h5><span className="approve-right-check">
                                     </span> Edit Request Approved </h5>
                                 </div>
-                                <button className="nw-thm-btn outline"> <FontAwesomeIcon icon={faEdit} /> Edit</button>
+                                <Link to={'/edit-profile'} className="nw-thm-btn outline"> <FontAwesomeIcon icon={faEdit} /> Edit</Link>
                             </>}
                             {isRequest == null &&
                                 <button className="nw-thm-btn" data-bs-toggle="modal" data-bs-target="#edit-Request">Edit Request</button>

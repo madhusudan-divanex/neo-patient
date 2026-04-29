@@ -427,7 +427,7 @@ function AppointmentDetailsCompleted() {
                                                 : "/lab-pic.png"} alt="" /> */}
                                             <div className="appointment-info-details">
                                                 <h4 className="">{appointmentData?.labTest?.testCat?.name}</h4>
-                                                {appointmentData?.labTest?.subCat?.map(item=><p className="">{item?.name}</p>)}
+                                                {appointmentData?.labTest?.subCat?.map(item=><p className="">{item?.subCategory}</p>)}
                                             </div>
                                         </div>
                                     </div>

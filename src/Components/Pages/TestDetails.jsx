@@ -32,8 +32,7 @@ function TestDetails() {
   const [selectedTest, setSelectedTest] = useState(preTest);
   const { notAllowed } = useSelector(state => state.patient)
   const [timeSlots, setTimeSlots] = useState([])
-
-  const price = selectedTest?.reduce((sum, item) => sum + Number(item.price || 0), 0)
+  const [selectedSubCats, setSelectedSubCats] = useState(preTest);
   async function fetchLabData() {
     setLoading(true)
     try {
@@ -76,8 +75,7 @@ function TestDetails() {
         setLabData(result.profile.basic)
         setLabImage(result.profile.images.thumbnail[0])
         setLabAddress(result.profile.address)
-        const data = result.labTest?.filter(test => test.status == 'active')
-        setLabTest(data)
+        setLabTest(result.labTest)
       }
     } catch (error) {
 
@@ -124,15 +122,17 @@ function TestDetails() {
 
   const handleBook = async (e) => {
     e.preventDefault();
+
     if (!userId) {
-      navigate('/login')
+      navigate('/login');
       return;
     }
+
     if (notAllowed) {
-      return toast.error("Please verify your kyc")
+      return toast.error("Please verify your kyc");
     }
 
-    if (!selectedTest || selectedTest.length === 0) {
+    if (!selectedSubCats || selectedSubCats.length === 0) {
       toast.error("Please select at least one test");
       return;
     }
@@ -146,45 +146,54 @@ function TestDetails() {
       toast.error("Please select a date");
       return;
     }
-    setLoading(true)
+
+    setLoading(true);
+
     try {
-      // 1️⃣ Prepare test IDs
-      const testId = selectedTest.map(t => t?._id);
+      // ✅ testIds (unique)
+      const testId = [...new Set(selectedSubCats.map(i => i.testId))];
 
-      // 2️⃣ Parse selected date
+      // ✅ subCatIds
+      const subCatId = selectedSubCats.map(i => i.subCatId);
+
+      // ✅ total fees
+      const totalFees = selectedSubCats.reduce((sum, i) => sum + i.price, 0);
+
+      // ✅ Date parsing
       const selectedDateObj = dates[activeIndex];
-      const [month, day] = selectedDateObj.date.split(" "); // "Dec 29"
-      const year = new Date().getFullYear(); // current year
+      const [month, day] = selectedDateObj.date.split(" ");
+      const year = new Date().getFullYear();
 
-      // Convert month name to month index
-      const monthIndex = new Date(`${month} 1, 2000`).getMonth(); // 0-based month
+      const monthIndex = new Date(`${month} 1, 2000`).getMonth();
 
-      // 3️⃣ Parse selected time ("08.00 PM")
-      const [time, meridiem] = timeIndex.split(" "); // ["08.00", "PM"]
+      const [time, meridiem] = timeIndex.split(" ");
       let [hours, minutes] = time.split(".").map(Number);
 
       if (meridiem === "PM" && hours !== 12) hours += 12;
       if (meridiem === "AM" && hours === 12) hours = 0;
 
-      // 4️⃣ Create JS Date object
       const appointmentDate = new Date(year, monthIndex, Number(day), hours, minutes);
 
-      // 5️⃣ Prepare payload
+      // ✅ FINAL payload
       const data = {
-        fees: price,
+        fees: totalFees,
         testId,
+        subCatId, // ⭐ IMPORTANT
         labId: params.id,
-        date: appointmentDate, // Date type
+        date: appointmentDate,
         patientId: userId,
-        doctorId: sessionStorage.getItem('doctorId') ? sessionStorage.getItem('doctorId') : null,
-        doctorAp: sessionStorage.getItem('doctorAp') ? sessionStorage.getItem('doctorAp') : null
+        doctorId: sessionStorage.getItem('doctorId') || null,
+        doctorAp: sessionStorage.getItem('doctorAp') || null
       };
+
       if (aptData) {
-        data.appointmentId = aptData?._id
+        data.appointmentId = aptData?._id;
+
         const response = await updateApiData("appointment/lab/reschedule", data);
+
         if (response.success) {
           toast.success("Appointment update successfully!");
-          setIsShow(true)
+          setIsShow(true);
         } else {
           toast.error(response.message || "Booking failed");
         }
@@ -195,16 +204,17 @@ function TestDetails() {
 
         if (response.success) {
           toast.success("Appointment booked successfully!");
-          setIsShow(true)
+          setIsShow(true);
         } else {
           toast.error(response.message || "Booking failed");
         }
       }
+
     } catch (error) {
       console.error("Error booking appointment:", error);
       toast.error("Something went wrong while booking appointment");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -298,6 +308,13 @@ function TestDetails() {
       })
       .map(slot => formatTime(slot?.startTime));
   }, [timeSlots, activeIndex, selectedDateObj]);
+  const grouped = preTest.reduce((acc, item) => {
+    if (!acc[item.category]) acc[item.category] = [];
+    acc[item.category].push(item);
+    return acc;
+  }, {});
+  const price = selectedSubCats?.reduce((sum, item) => sum + Number(item.price || 0), 0)
+
   return (
     <>
       {loading ? <Loader /> :
@@ -338,7 +355,7 @@ function TestDetails() {
               </div>
             </div>
 
-          </section> : 
+          </section> :
           <section className="date-time-section">
             <div className="container">
               <div className="row justify-content-center">
@@ -364,32 +381,44 @@ function TestDetails() {
                       <div className="row justify-content-center mb-3">
                         <div className="col-lg-10">
                           <h5 className="innr-title mb-2">Test Details</h5>
-                          {preTest?.map((item, key) =>
-                            <div className="medicine-card  " key={key}>
-                              <div className="left-icon">
-                                <img src="/lab-tube.svg" alt="" />
-                                <div className="report-amount-bx doctor-fees-content">
-                                  <h5 className="">{item?.shortName}</h5>
-                                  <p className="med-name">₹ {item?.price}</p>
+                          {Object.keys(grouped).map((cat, i) => (
+                            <div key={i}>
+                              <div className="row">{cat}</div>
+
+                              {grouped[cat].map((s, idx) => (
+                                <div className="medicine-card" key={idx}>
+                                  <div className="left-icon">
+                                    <img src="/lab-tube.svg" alt="" />
+                                    <div className="report-amount-bx doctor-fees-content">
+                                      <h5>{s.name}</h5>
+                                      <p>₹ {s.price}</p>
+                                    </div>
+                                  </div>
+
+                                  <label className="check-container">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedSubCats.some(
+                                        x => x.subCatId === s.subCatId
+                                      )}
+                                      onChange={(e) => {
+                                        setSelectedSubCats(prev => {
+                                          if (e.target.checked) {
+                                            return [...prev, s];
+                                          } else {
+                                            return prev.filter(
+                                              x => x.subCatId !== s.subCatId
+                                            );
+                                          }
+                                        });
+                                      }}
+                                    />
+                                    <span className="checkmark"></span>
+                                  </label>
                                 </div>
-                              </div>
-                              <label className="check-container">
-                                <input
-                                  type="checkbox"
-                                  id={`available-${key}`}
-                                  checked={selectedTest.some(test => test?._id === item?._id)}
-                                  onChange={(e) => {
-                                    setSelectedTest((prev) => {
-                                      if (e.target.checked) {
-                                        return [...prev, item];
-                                      } else {
-                                        return prev.filter(i => i._id !== item._id);
-                                      }
-                                    });
-                                  }} />
-                                <span className="checkmark"></span>
-                              </label>
-                            </div>)}
+                              ))}
+                            </div>
+                          ))}
 
                           <div className="mt-3">
                             <h5 className="innr-title mb-2">Select date</h5>

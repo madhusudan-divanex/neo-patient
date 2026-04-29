@@ -160,7 +160,7 @@ function LabTestDetailsUpcoming() {
                                             <div className="appointment-info-details">
                                                 <h4 className="">{appointmentData?.labId?.name}</h4>
                                                 <p className=""><FontAwesomeIcon icon={faLocationDot} /> {labAddress?.fullAddress}</p>
-                                                <p>Tests Name: <span className="cbc-report-title">{appointmentData?.testId?.map(t => t.shortName).join(", ")}</span></p>
+                                                <p>Tests Name: <span className="cbc-report-title">{appointmentData?.subCatId?.map(t => t.subCategory).join(", ")}</span></p>
 
                                             </div>
                                         </div>
@@ -199,7 +199,7 @@ function LabTestDetailsUpcoming() {
                                                                     <div className="prescriptin-picture lab-test-bx">
                                                                         <img src="/lab-tube.svg" alt="" style={{ width: "50px", height: "50px" }} />
                                                                         <div>
-                                                                            <h6 className="fz-18 fw-700 mb-0">{item?.testId?.shortName} Report</h6>
+                                                                            <h6 className="fz-18 fw-700 mb-0">{item?.subCatId?.subCategory} Report</h6>
                                                                             <p>{new Date(item?.createdAt)?.toLocaleDateString("en-GB", {
                                                                                 day: "2-digit",
                                                                                 month: "short",
@@ -208,12 +208,13 @@ function LabTestDetailsUpcoming() {
                                                                         </div>
                                                                     </div>
                                                                     <div>
-                                                                        <a href="javascript:void(0)" className="thm-btn thm-outline-btn rounded-2"><FontAwesomeIcon icon={faFilePdf} style={{ color: "#EF5350" }} /> Download</a>
+                                                                        <a href={`${base_url}/${item?.upload?.report}`} target="_blank" className="thm-btn thm-outline-btn rounded-2">
+                                                                            <FontAwesomeIcon icon={faFilePdf} style={{ color: "#EF5350" }} /> Download</a>
                                                                     </div>
                                                                 </div>
 
                                                                 <div className="cbc-result-bx mt-2">
-                                                                    <p>Result {item?.testId?.shortName} Report</p>
+                                                                    <p>Result {item?.subCatId?.subCategory} Report</p>
                                                                     <h5>{item?.upload?.comment}</h5>
                                                                 </div>
                                                             </div>
@@ -240,8 +241,8 @@ function LabTestDetailsUpcoming() {
                                         <ul className="appoint-booking-list">
                                             <li className="booking-item">Appointment ID<span className="booking-title">#{appointmentData?.customId}</span></li>
                                             <li className="booking-item">Booking Date<span className="booking-title">{formatDateTime(appointmentData?.date)}</span></li>
-                                            <li className="booking-item">CBC Report Amount<span className="booking-title">$ 25 </span></li>
-                                            <li className="booking-item">Total Amount<span className="booking-title">$ 25 </span></li>
+                                            {appointmentData?.testData?.map(t=><li className="booking-item">{t?.name} Report<span className="booking-title">₹ {t?.fees} </span></li>)}
+                                            <li className="booking-item">Total Amount<span className="booking-title">₹ {appointmentData?.fees} </span></li>
                                             <li className="booking-item">Payment<span className="booking-title paid-title text-capitalize">{appointmentData?.paymentStatus}</span></li>
                                         </ul>
                                     </div>
@@ -259,10 +260,8 @@ function LabTestDetailsUpcoming() {
                                             <li className="booking-item">Name<span className="booking-title">{profiles?.name}</span></li>
                                             <li className="booking-item">Email<span className="booking-title">{profiles?.email}</span></li>
                                             <li className="booking-item">Mobile Number<span className="booking-title">{profiles?.contactNumber}</span></li>
-
                                         </ul>
                                     </div>
-
                                 </div>
                             </div>
                             {appointmentData?.status == 'cancel' && <div className="col-lg-12">

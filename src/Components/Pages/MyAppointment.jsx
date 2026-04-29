@@ -178,7 +178,7 @@ function MyAppointment() {
                                                                                 `${base_url}/${item?.doctorId?.doctorId?.profileImage}` : "/doctor-timing.png"} alt="" />
                                                                             <div className="appointment-info-details">
                                                                                 <h4 className="">{item?.doctorId?.name}</h4>
-                                                                                <h6 className="nw-appointment-title">{item?.doctorAddress?.specialty?.name} <span className="slash-title" >|</span> {item?.hospitalId ? item?.hospitalId?.name : item?.doctorAddress?.hospitalName}</h6>
+                                                                                <h6 className="nw-appointment-title">{item?.doctorAddress?.specialty?.name} {item?.doctorAddress?.specialty&&<span className="slash-title" >|</span>} {item?.hospitalId ? item?.hospitalId?.name : item?.doctorAddress?.hospitalName}</h6>
                                                                                 <p className=""><FontAwesomeIcon icon={faLocationDot} /> {item?.doctorAddress?.fullAddress}</p>
                                                                             </div>
                                                                         </div>
@@ -257,7 +257,7 @@ function MyAppointment() {
                                                                             <div className="appointment-info-details">
                                                                                 <h4 className="">{item?.labId?.name}</h4>
                                                                                 <p className=""><FontAwesomeIcon icon={faLocationDot} /> {item?.labAddress?.fullAddress}</p>
-                                                                                <p>Tests Name: <span className="cbc-report-title">{item?.testId?.map(t => t.shortName).join(", ")}
+                                                                                <p>Tests Name: <span className="cbc-report-title">{item?.subCatId?.map(t => t.subCategory).join(", ")}
                                                                                 </span></p>
                                                                             </div>
                                                                         </div>

@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 function Profile() {
     const dispatch = useDispatch()
     const userId = localStorage.getItem('userId')
-    const { profiles, medicalHistory, demographic, notAllowed, labAppointment, kyc, prescription, isRequest, customId } = useSelector(state => state.patient)
+    const { profiles, medicalHistory, user, demographic, notAllowed, labAppointment, kyc, prescription, isRequest, customId } = useSelector(state => state.patient)
     const [formData, setFormData] = useState({ name: "", email: "", contactNumber: "", gender: "", profileImage: null })
 
     const handleChange = (e) => {
@@ -46,7 +46,7 @@ function Profile() {
             if (response.success) {
                 dispatch(fetchPatientDetail())
                 toast.success("Data updated")
-            }else{
+            } else {
                 toast.error(response.message)
             }
         } catch (error) {
@@ -83,7 +83,11 @@ function Profile() {
                                         <img src={formData?.profileImage ?
                                             formData?.profileImage instanceof File ? URL.createObjectURL(formData.profileImage)
                                                 : `${base_url}/${formData?.profileImage}`
-                                            : "/call-pic.jpg"} alt="" className="rounded-cricle" />
+                                            : "/profile.png"} alt="" className="rounded-cricle"
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = "/profile.png";
+                                            }} />
                                         <div className="lab-profile-edit-avatr">
                                             <a href="javascript:void(0)" className="edit-btn cursor-pointer">
                                                 <FontAwesomeIcon icon={faPen} />
@@ -99,7 +103,7 @@ function Profile() {
                                     </div>
                                     <div className="user-detail-bx my-2">
                                         <h5 className="">{profiles?.name}</h5>
-                                        <p>ID: {customId}</p>
+                                        <p>ID: {user?.nh12}</p>
                                     </div>
                                 </div>
                             </div>
@@ -166,9 +170,9 @@ function Profile() {
 
             </div>
 
-              <div className="text-end mt-4">
-                 <Link to={-1} className="nw-thm-btn outline">Go Back</Link>
-              </div>
+            <div className="text-end mt-4">
+                <Link to={-1} className="nw-thm-btn outline">Go Back</Link>
+            </div>
 
         </>
     )

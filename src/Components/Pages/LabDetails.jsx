@@ -39,7 +39,7 @@ function LabDetails() {
                 setLabData(result.user)
                 setLabImage(result.labImage)
                 setLabAddress(result.labAddress)
-                const data = result.labTest?.filter(test => test.status == 'active')
+                const data = result.labTest
                 setLabTest(data)
             }
         } catch (error) {
@@ -91,10 +91,10 @@ function LabDetails() {
     }, [userId])
     const handleFavorite = async () => {
         const data = { userId }
-        if(searchParams.get('type')=="hospital"){
-            data.hospitalId=params.id
-        }else{
-            data.labId=params.id
+        if (searchParams.get('type') == "hospital") {
+            data.hospitalId = params.id
+        } else {
+            data.labId = params.id
         }
         try {
             const response = await securePostData('patient/favorite', data)
@@ -108,7 +108,7 @@ function LabDetails() {
 
         }
     }
-    
+
     const handleCopy = () => {
         const text = `${client_url}/lab-detail/${params?.name}/${params.id}`;
         if (navigator.clipboard && window.isSecureContext) {
@@ -193,15 +193,15 @@ function LabDetails() {
                                                     <p><FontAwesomeIcon icon={faLocationDot} /> {labAddress?.fullAddress}</p>
                                                 </div>
                                                 <div className="d-flex gap-3">
-                                                    {searchParams.get('type')==="hospital"?
-                                                    <button className="heart-btn" onClick={handleFavorite}>
-                                                        {favIds?.some(fav => fav?.hospitalId === params.id) ?
-                                                            <i className="fa-solid fa-heart" style={{ color: "red" }}></i>
-                                                            : <i className="fa-regular fa-heart"></i>}</button>
-                                                    :<button className="heart-btn" onClick={handleFavorite}>
-                                                        {favIds?.some(fav => fav?.labId === params.id) ?
-                                                            <i className="fa-solid fa-heart" style={{ color: "red" }}></i>
-                                                            : <i className="fa-regular fa-heart"></i>}</button>}
+                                                    {searchParams.get('type') === "hospital" ?
+                                                        <button className="heart-btn" onClick={handleFavorite}>
+                                                            {favIds?.some(fav => fav?.hospitalId === params.id) ?
+                                                                <i className="fa-solid fa-heart" style={{ color: "red" }}></i>
+                                                                : <i className="fa-regular fa-heart"></i>}</button>
+                                                        : <button className="heart-btn" onClick={handleFavorite}>
+                                                            {favIds?.some(fav => fav?.labId === params.id) ?
+                                                                <i className="fa-solid fa-heart" style={{ color: "red" }}></i>
+                                                                : <i className="fa-regular fa-heart"></i>}</button>}
                                                     <button className="heart-btn" onClick={handleCopy}><i className="fas fa-share-alt"></i></button>
                                                 </div>
                                             </div>
@@ -234,28 +234,44 @@ function LabDetails() {
                                         </legend>
 
                                         <ul className="">
-                                            {labTest?.length>0? labTest?.map((item, key) => (
-                                                <li className="permission-item" key={key}>
-                                                    <div className="accordion-body-concet nw-select-test-bx">
-                                                        <input
-                                                            className="form-check-input mt-0"
-                                                            type="checkbox"
-                                                            id={`available-${key}`} // ensure unique id
-                                                            onChange={(e) => {
-                                                                setSelectedTest((prev) => {
-                                                                    if (e.target.checked) {
-                                                                        return [...prev, item];
-                                                                    } else {
-                                                                        return prev.filter(i => i.id !== item.id);
-                                                                    }
-                                                                });
-                                                            }}
-                                                        />
-                                                        <label htmlFor={`available-${key}`}>{item?.shortName}</label>
-                                                        <span className="price">₹ {item?.price}</span>
-                                                    </div>
-                                                </li>
-                                            )):'No test availabe now'}
+                                            {labTest?.length > 0 ? labTest?.map((item, key) => (
+                                                <>
+                                                    <div className="row">{item?.category?.name}</div>
+                                                    {item?.subCatData?.filter(s => s?.status == "active")
+                                                        ?.map(s =>
+                                                            <li className="permission-item" >
+                                                                <div className="accordion-body-concet nw-select-test-bx">
+                                                                    <input
+                                                                        className="form-check-input mt-0"
+                                                                        type="checkbox"
+                                                                        id={`available-${key}`}
+                                                                        onChange={(e) => {
+                                                                            setSelectedTest((prev) => {
+                                                                                if (e.target.checked) {
+                                                                                    return [
+                                                                                        ...prev,
+                                                                                        {
+                                                                                            testId: item._id,
+                                                                                            subCatId: s.subCat._id,
+                                                                                            name: s.subCat.subCategory,
+                                                                                            price: s.price,
+                                                                                            category: item.category?.name
+                                                                                        }
+                                                                                    ];
+                                                                                } else {
+                                                                                    return prev.filter(
+                                                                                        x => x.subCatId !== s.subCat._id
+                                                                                    );
+                                                                                }
+                                                                            });
+                                                                        }}
+                                                                    />
+                                                                    <label htmlFor={`available-${key}`}>{s?.subCat?.subCategory}</label>
+                                                                    <span className="price">₹ {s?.price}</span>
+                                                                </div>
+                                                            </li>)}
+                                                </>
+                                            )) : 'No test availabe now'}
                                         </ul>
 
                                         <div className="text-center pt-5 appoint-bx">

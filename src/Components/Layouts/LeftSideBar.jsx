@@ -25,7 +25,12 @@ function LeftSideBar() {
                     <div className="main-user-profile-card">
                         <div className="main-user-picture">
                             <img src={profiles?.profileImage?
-                            `${base_url}/${profiles?.profileImage}`:"/call-pic.jpg"} alt="" />
+                            `${base_url}/${profiles?.profileImage}`:
+                            "/profile.png"} alt=""
+                            onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/profile.png";
+                  }} />
                         </div>
                         <div className="user-detail-bx">
                             <h5>{profiles?.name}</h5>

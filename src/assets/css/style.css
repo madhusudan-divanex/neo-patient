@@ -4229,6 +4229,16 @@ flex-shrink: 0;
   width: 80px;
   height: 55px;
 }
+.nw-chip-card {
+  position: absolute;
+  top: 30px;
+  left: 20px;
+  background-image: url(/patientCardLogo.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 80px;
+  height: 55px;
+}
 
 .add-patients-clients img {
   /* width: 420px; */

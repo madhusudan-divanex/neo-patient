@@ -325,7 +325,7 @@ function NeoAi() {
                                                         <div className="d-flex align-items-center justify-content-between">
                                                             <div className="chat-usr-avatr-crd">
                                                                 <div className="chat-usr-info">
-                                                                    <h5 className="text-capitalize">{chat?.title.slice(0,35)}</h5>
+                                                                    <h5 className="text-capitalize">{chat?.title.slice(0, 35)}</h5>
                                                                 </div>
                                                             </div>
 
@@ -382,7 +382,7 @@ function NeoAi() {
 
                                                             {/* USER QUESTION */}
                                                             {msg.type === "user" && (<>
-                                                                
+
                                                                 {msg?.file && (() => {
                                                                     const isFileObject = typeof msg.file === "object";
 
@@ -580,10 +580,10 @@ function NeoAi() {
                                                                         maxWidth: "200px",
                                                                         borderRadius: "8px",
                                                                         display: "block",
-                                                                       
+
                                                                     }}
                                                                 />
-                                                                
+
                                                                 <button
                                                                     className="chat-close-btn"
                                                                     onClick={() => {
@@ -592,8 +592,8 @@ function NeoAi() {
                                                                     }}
                                                                 >
                                                                     <div className="chat-close-picture">
-                                                                      <FontAwesomeIcon icon={faClose} />
-                                                                     </div>
+                                                                        <FontAwesomeIcon icon={faClose} />
+                                                                    </div>
                                                                 </button>
                                                             </div>
                                                         )}

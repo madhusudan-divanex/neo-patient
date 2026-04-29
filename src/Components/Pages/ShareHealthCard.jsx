@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import ProfileSidebar from "./ProfileSidebar"
-import { faDownload, faShareNodes, } from "@fortawesome/free-solid-svg-icons"
+import { faDownload, faShareNodes, faUserPlus, } from "@fortawesome/free-solid-svg-icons"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchPatientDetail } from "../../Redux/features/patient"
 import { useEffect, useRef, useState } from "react"
@@ -81,8 +81,8 @@ function ShareHealthCard() {
                     </div>
                 </div>
                 <div className="all-profile-data-bx">
-                    <div className="row">
-                        <div className="col-lg-6 col-md-6 col-sm-12 mb-3">
+                    <div className="d-flex gap-3">
+                        <div className=" mb-3">
                             <div className="neo-health-id-card">
                                 <div className="neo-health-card-header text-center my-3">
                                     <h4>Your NeoHealth<span className="neo-card-title">Card</span></h4>
@@ -92,25 +92,30 @@ function ShareHealthCard() {
                                                     <img src="/id-card.png" alt="" />
                                                 </div> */}
                                 <div className="add-patients-clients premium-crd-details" ref={cardRef}>
-                                    <div className="chip-card"></div>
-                                    <img src="/PatientNeoCard.png" alt="" loading="lazy" />
+                                    {/* <div className="chip-card"></div> */}
+                                    <div className="nw-chip-card">
+                                        {/* <FontAwesomeIcon icon={faUserPlus} color="#fff" className="fz-40"/> */}
+                                    </div>
+                                    <img src="/NeoCard.png" alt="" loading="lazy" />
                                     <div className="patient-card-details nw-patient-details">
-                                        <h4>{profiles?.name?.length > 13 ? profiles?.name?.slice(0, 13) :
+                                        <h4>{profiles?.name?.length > 18 ? profiles?.name?.slice(0, 15) + '...' :
                                             profiles?.name}</h4>
-                                        <p>Patient ID</p>
+                                        {/* <p>Patient ID</p> */}
                                         <h6>{user?.nh12}</h6>
                                     </div>
                                     {/* <div className="qr-code-generate"></div> */}
                                     <QRCodeCanvas
-                                        value={userId}
+                                        value={`https://neohealthcard.com/user/${user?.nh12}`}
                                         size={256}
                                         className="qr-code"
+                                        bgColor="transparent"
+                                        fgColor="#ffffff"
                                         style={{ height: "auto", maxWidth: "100%", width: "20%" }}
                                     />
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-6 col-md-6 col-sm-12">
+                        <div className="">
                             <div className="benefit-content-bx">
                                 <h4 className="text-black fz-20 fw-600">NeoHealthCard Benefits</h4>
                                 <div className="benefit-details-bx mb-3">
@@ -128,8 +133,8 @@ function ShareHealthCard() {
             </div>
 
             <div className="text-end mt-4">
-                 <Link to={-1} className="nw-thm-btn outline">Go Back</Link>
-              </div>
+                <Link to={-1} className="nw-thm-btn outline">Go Back</Link>
+            </div>
 
 
         </>
